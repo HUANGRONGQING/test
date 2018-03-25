@@ -1,0 +1,62 @@
+#include"stdio.h"
+#include"stdlib.h"
+typedef struct node
+{
+	int date;
+	struct node *next;
+}LNode,*LinkList;
+LinkList init();
+int josephus_LinkList(LinkList H,int s,int m);
+void main(void)
+{	
+	int s,m;
+	LinkList H;
+	H=init();
+	printf("请输入起始序号和计数值：");
+	scanf("%d%d",&s,&m);
+	josephus_LinkList(H,s,m);
+}
+LinkList init()
+{	
+	LinkList H=NULL,L=NULL;
+	LinkList p;
+	p=(LinkList)malloc(sizeof(LNode));
+	p->next=NULL;
+	printf("请输入编号,0截止\n");
+	scanf("%d",&p->date);
+	while(p->date!=0)
+	{
+		if(H==NULL) {H=p;L=p;}
+		else {L->next=p;L=p;}
+		p=(LinkList)malloc(sizeof(LNode));
+		p->next=NULL;
+		scanf("%d",&p->date);
+	}
+	L->next=H;
+	return H;
+}
+int josephus_LinkList(LinkList H,int s,int m)
+{
+	int i;
+	LinkList pre=NULL,p=NULL;
+	if(!H) {printf("表中无元素！\n");return 0;}
+	p=H;
+ 	for(i=1;i<s;i++) p=p->next;
+	printf("输出约瑟夫序列：");
+	while(p!=p->next)
+	{
+		for(i=1;i<m;i++)
+		{
+			pre=p;
+			p=p->next;
+		}
+		printf("%d\t",p->date);
+		pre->next=p->next;
+		free(p);
+		p=pre->next;
+	}
+	printf("%d\n",p->date);
+	free(p);
+	return 1;
+}
+
